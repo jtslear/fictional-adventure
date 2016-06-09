@@ -2,8 +2,7 @@
 #include <DHT.h>
 #include <WiFiUdp.h>
 
-
-#define DHTPIN 7
+#define DHTPIN 5
 #define DHTTYPE DHT22
 
 DHT dht(DHTPIN, DHTTYPE);
@@ -33,24 +32,18 @@ void setup() {
   pinMode(16, OUTPUT);
   digitalWrite(16, LOW);
 
-  //dht.begin();
+  dht.begin();
+  Serial.println("Started DHT");
   digitalWrite(16, HIGH);
 
 }
 
 void loop() {
   digitalWrite(16, LOW);
-  // Reading temperature or humidity takes about 250 milliseconds!
-  // Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
-  //float humidity = dht.readHumidity();
-  float humidity = 75.2;
-  delay(250);
+  float humidity = dht.readHumidity();
   // Read temperature as Fahrenheit (isFahrenheit = true)
-  //float temperature = dht.readTemperature(true);
-  float temperature = 75.8;
-  delay(250);
+  float temperature = dht.readTemperature(true);
 
-  // Check if any reads failed and exit early (to try again)
   if (isnan(humidity) || isnan(temperature)) {
     Serial.println("Failed to read from DHT sensor!");
   } else {
@@ -63,5 +56,7 @@ void loop() {
     udp.endPacket();
   }
   digitalWrite(16, HIGH);
+  // Reading temperature or humidity takes about 250 milliseconds!
+  // Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
   delay(2000);
 }
